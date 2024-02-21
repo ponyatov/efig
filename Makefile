@@ -23,7 +23,17 @@ D += $(wildcard src/*.d*)
 
 # all
 .PHONY: all
-all:
+all: qemu
+
+.PHONY: qemu
+qemu: fw/$(MODULE).iso
+	qemu-system-x86_64 -cdrom $<
+
+ISO_FILES = $(shell find iso -type f)
+fw/$(MODULE).iso: $(ISO_FILES) Makefile
+	-sudo umount tmp/iso
+	grub-mkrescue -o $@ iso
+	sudo mount $@ tmp/iso -o uid=`whoami`
 
 # format
 format: install
