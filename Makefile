@@ -23,11 +23,12 @@ D += $(wildcard src/*.d*)
 
 # all
 .PHONY: all
-all: fw/$(MODULE).iso
+all: qemu
 
 .PHONY: qemu
 qemu: fw/$(MODULE).iso
-	qemu-system-x86_64 -cdrom $<
+	qemu-system-x86_64 \
+		-bios /usr/share/ovmf/OVMF.fd -cdrom $<
 
 ISO_FILES = $(shell find iso -type f)
 fw/$(MODULE).iso: $(ISO_FILES) Makefile
