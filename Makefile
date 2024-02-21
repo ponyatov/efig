@@ -23,7 +23,7 @@ D += $(wildcard src/*.d*)
 
 # all
 .PHONY: all
-all: qemu
+all: fw/$(MODULE).iso
 
 .PHONY: qemu
 qemu: fw/$(MODULE).iso
@@ -42,10 +42,8 @@ format: install
 .PHONY: install update gz ref
 install: doc gz
 	$(MAKE) update
-	dub build dfmt
 update:
 	sudo apt update
 	sudo apt install -yu `cat apt.txt`
 gz:
 ref:
-

@@ -2,4 +2,4 @@ git make curl
 code meld clang-format
 grub-common grub-pc-bin grub-efi-amd64-bin
 grub-rescue-pc xorriso mtools
-qemu-system-x86
+qemu-system-x86 ovmf
