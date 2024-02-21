@@ -2,6 +2,7 @@
 MODULE  = $(notdir $(CURDIR))
 
 # version
+KERNEL_VER = $(shell uname -r)
 
 # dir
 CWD  = $(CURDIR)
@@ -23,18 +24,26 @@ D += $(wildcard src/*.d*)
 
 # all
 .PHONY: all
-all: qemu
+all: fw
 
 .PHONY: qemu
 qemu: fw/$(MODULE).iso
 	qemu-system-x86_64 \
 		-bios /usr/share/ovmf/OVMF.fd -cdrom $<
 
+.PHONY: fw
+fw: fw/$(MODULE).iso
+
 ISO_FILES = $(shell find iso -type f)
+ISO_FILES += iso/boot/vmlinuz-$(KERNEL_VER)
+ISO_FILES += iso/boot/initrd.img-$(KERNEL_VER)
 fw/$(MODULE).iso: $(ISO_FILES) Makefile
 	-sudo umount tmp/iso
 	grub-mkrescue -o $@ iso
 	sudo mount $@ tmp/iso -o uid=`whoami`
+
+iso/boot/%: /boot/%
+	cp $< $@
 
 # format
 format: install
