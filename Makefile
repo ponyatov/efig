@@ -38,16 +38,11 @@ ISO_FILES = $(shell find iso -type f)
 ISO_FILES += iso/boot/vmlinuz-$(KERNEL_VER)
 ISO_FILES += iso/boot/initrd.img-$(KERNEL_VER)
 
-MODS = $(wildcard /boot/grub/x86_64-efi/*.mod)
-ISO_FILES += $(subst /boot/grub,iso/boot/grub,$(MODS))
-
 fw/$(MODULE).iso: $(ISO_FILES) Makefile
 	-sudo umount tmp/iso
 	grub-mkrescue -o $@ iso
 	sudo mount $@ tmp/iso -o uid=`whoami`
 
-iso/boot/x86_64-efi/%: /boot/x86_64-efi/%
-	cp $< $@
 iso/boot/%: /boot/%
 	cp $< $@
 
